@@ -50,9 +50,10 @@
         </v-col></v-row
       >
       <v-row no-gutters justify="center" class="pa-1 mt-2">
-        <v-col sm="6">
-          <v-container white fluid elevation="4" class="pa-2">
-        <v-row style="background-color: #007de3" class="ma-0 pa-2" no-gutters>
+        <v-col sm="4">
+          <v-card height="400">
+          <v-container fluid white class="pa-2">
+        <v-row style="background-color: #1976D2" class="ma-0 pa-2" no-gutters>
           <div :class="'pl-4 text-h6 white--text'">Add Data</div>
           <div class="flex-grow-1"></div>
         </v-row>
@@ -60,6 +61,7 @@
         <v-form
           ref="addDataForm"
           v-model="valid"
+          
         >
           <v-row dense class="pt-0 mt-0 pb-0 mb-0">
             <v-col class="ma-2">
@@ -105,9 +107,11 @@
           >
         </v-row>
       </v-container>
+      </v-card>
         </v-col>
-        <v-col sm="6">
-          <v-container white fluid elevation="4" class="pa-2">
+        <v-col sm="8">
+          <v-card height="400">
+          <v-container white fluid class="pa-2">
           <v-data-table
               :headers="headers"
               :items="items"
@@ -118,7 +122,7 @@
               hide-default-footer
               no-data-text="No data found."
               fixed-header
-              height="400"
+              height="325"
               calculate-widths
               class=""
                   >
@@ -200,6 +204,7 @@
                 </template>
           </v-data-table>
           </v-container>
+          </v-card>
         </v-col>
       </v-row>
       <fdafooter></fdafooter>
@@ -226,28 +231,29 @@ export default {
       "sortable": true,
       "text": "Product Name",
       "align": "left",
-      "class": "blue-grey lighten-3 black--text font-weight-bold",
+      "class": "blue darken-2 white--text font-weight-bold",
       "value": "product_name"
       },
       {
       "sortable": true,
       "text": "Product Price",
       "align": "left",
-      "class": "blue-grey lighten-3 black--text font-weight-bold",
+      "class": "blue darken-2 white--text font-weight-bold",
       "value": "product_price"
       },
       {
       "sortable": true,
       "text": "Product Quantity",
       "align": "left",
-      "class": "blue-grey lighten-3 black--text font-weight-bold",
+      "class": "blue darken-2 white--text font-weight-bold",
       "value": "product_quantity"
       },
       {
       "sortable": false,
       "text": "Action",
-      "align": "left",
+      "align": "center",
       "value": "actions",
+      "class": "blue darken-2 white--text font-weight-bold",
       },
     ],
     items: [],
