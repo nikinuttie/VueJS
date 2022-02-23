@@ -57,44 +57,125 @@
           <div :class="'pl-4 text-h6 white--text'">Add Data</div>
           <div class="flex-grow-1"></div>
         </v-row>
-        <v-row align="center" justify="center" no-gutters>
+        <v-row align="center" justify="center" >
         <v-form
           ref="addDataForm"
           v-model="valid"
           
         >
           <v-row dense class="pt-0 mt-0 pb-0 mb-0">
-            <v-col class="ma-2">
+            <v-col 
+              class="d-flex"
+              cols="12"
+              sm="6"
+            >
               <v-text-field
               v-model="newdata.product_name"
-              :counter="10"
+              :counter="20"
               label="Product Name"
+              :rules="[rules.required, rules.counter]"
               outlined
-              required
+              dense
             ></v-text-field>
               
             </v-col>  
-            <v-col class="ma-2">
+            <v-col 
+              class="d-flex"
+              cols="12"
+              sm="6"
+            >
               <v-text-field
               v-model="newdata.product_price"
-              :counter="10"
               label="Product Price"
               outlined
-              required
+              type="number"
+              :rules="[rules.required]"
+              dense
+              prefix="$"
             ></v-text-field>
               
             </v-col> 
-            <v-col class="ma-2">
+            
+            
+          </v-row>
+          <v-row dense class="pt-0 mt-0 pb-0 mb-0">
+            <v-col 
+              class="d-flex"
+              cols="12"
+              sm="6"
+            >
               <v-text-field
               v-model="newdata.product_quantity"
-              :counter="10"
+              type='number'
               label="Product Quantity"
+              :rules="[rules.required,rules.isint]"
               outlined
               required
+              dense
             ></v-text-field>
               
             </v-col>
-            
+            <v-col 
+              class="d-flex"
+              cols="12"
+              sm="6"
+            >
+              <v-select
+              :items="productTypes"
+              label="Product Type"
+              outlined
+              dense
+              v-model="newdata.product_type"
+              ></v-select>
+              
+            </v-col>
+          </v-row>
+          <v-row dense class="pt-0 mt-0 pb-0 mb-0">
+            <v-col 
+              class="d-flex"
+              cols="12"
+              sm="6"
+            >
+              <v-select
+              :items="productPriority"
+              label="Product Priority"
+              outlined
+              dense
+              v-model="newdata.product_priority"
+              ></v-select>
+              
+            </v-col>
+            <v-col 
+              class="d-flex"
+              cols="12"
+              sm="6"
+            >
+              <v-menu
+        v-model="menu2"
+        :close-on-content-click="false"
+        :nudge-right="40"
+        transition="scale-transition"
+        offset-y
+        min-width="auto"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field
+            v-model="newdata.product_date_created"
+            label="Picker without buttons"
+            prepend-icon="mdi-calendar"
+            readonly
+            dense
+            v-bind="attrs"
+            v-on="on"
+          ></v-text-field>
+        </template>
+        <v-date-picker
+          v-model="newdata.product_date_created"
+          @input="menu2 = false"
+        ></v-date-picker>
+      </v-menu>
+              
+            </v-col>
           </v-row>
         </v-form>
         </v-row>
@@ -226,6 +307,15 @@ export default {
   },
   data: () => ({
     moreInformationDialog: false,
+    rules: {
+          required: value => !!value || 'Required.',
+          counter: value => value.length <= 20 || 'Max 20 characters',
+          isint: value => (parseFloat(value) == parseInt(value)) && !isNaN(value) || 'Must be Integer',
+          email: value => {
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            return pattern.test(value) || 'Invalid e-mail.'
+          },
+    },
     headers: [
       {
       "sortable": true,
@@ -249,6 +339,27 @@ export default {
       "value": "product_quantity"
       },
       {
+      "sortable": true,
+      "text": "Product Type",
+      "align": "left",
+      "class": "blue darken-2 white--text font-weight-bold",
+      "value": "product_type"
+      },
+      {
+      "sortable": true,
+      "text": "Resupply Priority",
+      "align": "left",
+      "class": "blue darken-2 white--text font-weight-bold",
+      "value": "product_priority"
+      },
+      {
+      "sortable": true,
+      "text": "Date Created",
+      "align": "left",
+      "class": "blue darken-2 white--text font-weight-bold",
+      "value": "product_date_created"
+      },
+      {
       "sortable": false,
       "text": "Action",
       "align": "center",
@@ -262,7 +373,26 @@ export default {
     requestItemsPerPage: 10,
     numberOfRequestPages: 1,
     valid: true,
-    newdata: {}
+    newdata: {
+      product_date_created: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      product_priority: 'Low',
+      product_type: 'Home',
+      product_name: ''
+    },
+    productTypes: [
+      'Home',
+      'Sport',
+      'Education',
+      'Lawn',
+      'Other'
+    ],
+    productPriority: [
+      'Low',
+      'Med',
+      'High'
+    ],
+    date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+    menu2: false,
   }),
   created() {
     
@@ -305,20 +435,36 @@ export default {
     },
     addData(){
       var vm = this;
-            
-      axios({
+
+      if (this.$refs.addDataForm.validate()) {
+        axios({
         method: 'post',
         url: process.env.VUE_APP_API_URL + '/api/cart-items/',
         data: vm.newdata
       }).then((response) => {
           console.log(response);
           vm.getData();
-          vm.newdata = {};
+          vm.newdata = {
+            product_date_created: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+            product_priority: 'Low',
+            product_type: 'Home',
+            product_name: ''
+          };
+          vm.$refs.addDataForm.resetValidation()
       }).catch(function (error) {
           console.log(error);
-          vm.newdata = {};
+          vm.newdata = {
+            product_date_created: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+            product_priority: 'Low',
+            product_type: 'Home',
+            product_name: ''
+          };
+          vm.$refs.addDataForm.resetValidation()
 
       });
+
+      } //make sure valid data before updating    
+      
     },
     getData(){
       var vm = this;
