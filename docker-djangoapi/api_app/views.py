@@ -25,18 +25,25 @@ class CartItemViews(APIView):
             item = CartItem.objects.get(id=id)
             serializer = CartItemSerializer(item)
             return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
-        result = {
-                "name": "James Sanders"
-        }
-        """ if 'name' in cache:
-            print("Found in Cache")
+        dbhits = 1
+        if 'productdbhits' in cache:
+            print("Found product db hit metric in Cache")
+            dbhits = cache.get('productdbhits')
+            dbhits = dbhits + 1
+            cache.set('productdbhits', dbhits, timeout=None)
         else:
         # store data in cache
-            print("Setting Cache")
-            cache.set('name', result, timeout=60 * 15) """
+            print("Setting Product DB Hit Metrics Cache")
+            #set this to not expire
+            cache.set('productdbhits', 1, timeout=None)
         items = CartItem.objects.all()
+        
         serializer = CartItemSerializer(items, many=True)
-        return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        data = {
+            'items': serializer.data,
+            'hits': dbhits
+        }
+        return Response({"status": "success", "data": data}, status=status.HTTP_200_OK)
     def patch(self, request, id=None):
         item = CartItem.objects.get(id=id)
         serializer = CartItemSerializer(item, data=request.data, partial=True) #TODO: read more about this and better understand how this serializer works
@@ -51,23 +58,38 @@ class CartItemViews(APIView):
         return Response({"status": "success", "data": "Item Deleted"})
 
 class BaseballStatViews(APIView):
-        
-    #@method_decorator(cache_page(60*15))
+    def post(self, request):
+        serializer = BaseballStatSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    
+    @method_decorator(vary_on_cookie)
+    @method_decorator(cache_page(60*1))
     def get(self, request, id=None):
         if id:
             item = BaseballStat.objects.get(id=id)
             serializer = BaseballStatSerializer(item)
             return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
-        result = {
-                "name": "James Sanders"
-        }
-        """ if 'name' in cache:
-            print("Found in Cache")
+        
+        dbhits = 1
+        if 'baseballdbhits' in cache:
+            print("Found baseball db hit metric in Cache")
+            dbhits = cache.get('baseballdbhits')
+            dbhits = dbhits + 1
+            cache.set('baseballdbhits', dbhits, timeout=None)
         else:
         # store data in cache
-            print("Setting Cache")
-            cache.set('name', result, timeout=60 * 15) """
+            print("Setting Baseball DB Hit Metric Cache")
+            #set this to not expire
+            cache.set('baseballdbhits', 1, timeout=None)
         items = BaseballStat.objects.all()
         serializer = BaseballStatSerializer(items, many=True)
-        return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        data = {
+            'items': serializer.data,
+            'hits': dbhits
+        }
+        return Response({"status": "success", "data": data}, status=status.HTTP_200_OK)
     

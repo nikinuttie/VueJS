@@ -334,6 +334,17 @@
                         </v-list-item>
                       </v-list>
                     </v-menu>
+                    <v-chip
+                      class="ma-2 white--text"
+                      color="red darken-4"
+                      label
+                    >
+                    <v-icon left>
+                      mdi-database
+                    </v-icon>
+                      DB Hits: {{ productdbhits }}
+                    </v-chip>
+                    
 
                     <v-spacer></v-spacer>
 
@@ -369,6 +380,11 @@
           </v-card>
         </v-col>
       </v-row>
+      <v-row no-gutters justify="center" class="pa-1 mt-2">
+        <v-col sm="12">
+          <bballstats></bballstats>
+        </v-col>
+      </v-row>
       <fdafooter></fdafooter>
     </v-main>
   </v-app>
@@ -378,6 +394,7 @@
 // @ is an alias to /src
 import Header from "@/components/shared/Header.vue";
 import Footer from "@/components/shared/Footer.vue";
+import Baseball from "@/components/Baseball.vue";
 import axios from "axios";
 
 export default {
@@ -385,6 +402,7 @@ export default {
   components: {
     fdaheader: Header,
     fdafooter: Footer,
+    bballstats: Baseball
   },
   data: () => ({
     moreInformationDialog: false,
@@ -453,6 +471,7 @@ export default {
       },
     ],
     items: [],
+    productdbhits: 0,
     requestItemsPerPageSelect: [5, 10, 25],
     requestItemsPage: 1,
     requestItemsPerPage: 10,
@@ -597,8 +616,9 @@ export default {
       axios
         .get(process.env.VUE_APP_API_URL + "/api/cart-items/")
         .then((response) => {
-          console.log(response.data.data);
-          vm.items = response.data.data;
+          console.log(response);
+          vm.items = response.data.data.items;
+          vm.productdbhits = response.data.data.hits;
         })
         .catch((err) => {
           console.log(err);

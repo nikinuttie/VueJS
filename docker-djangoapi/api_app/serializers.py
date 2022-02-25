@@ -15,15 +15,15 @@ class CartItemSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 
 class BaseballStatSerializer(serializers.ModelSerializer):
-    player_name = serializers.TextField()
-    team_name = serializers.TextField()
-    position = serializers.TextField()
-    player_age = serializers.PositiveIntegerField()
-    games_played = serializers.PositiveIntegerField()
-    at_bats = serializers.PositiveIntegerField()
-    runs = serializers.PositiveIntegerField()
-    home_runs = serializers.PositiveIntegerField()
-    rbi = serializers.PositiveIntegerField()
+    player_name = serializers.CharField(max_length=100)
+    team_name = serializers.CharField(max_length=10)
+    position = serializers.CharField(max_length=10)
+    player_age = serializers.IntegerField()
+    games_played = serializers.IntegerField()
+    at_bats = serializers.IntegerField()
+    runs = serializers.IntegerField()
+    home_runs = serializers.IntegerField()
+    rbi = serializers.IntegerField()
 
     class Meta:
         model = BaseballStat
