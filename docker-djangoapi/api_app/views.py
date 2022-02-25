@@ -6,8 +6,8 @@ from rest_framework import status
 from django.core.cache import cache
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
-from .serializers import CartItemSerializer
-from .models import CartItem
+from .serializers import CartItemSerializer, BaseballStatSerializer
+from .models import CartItem, BaseballStat
 
 # Create your views here.
 class CartItemViews(APIView):
@@ -28,12 +28,12 @@ class CartItemViews(APIView):
         result = {
                 "name": "James Sanders"
         }
-        if 'name' in cache:
+        """ if 'name' in cache:
             print("Found in Cache")
         else:
         # store data in cache
             print("Setting Cache")
-            cache.set('name', result, timeout=60 * 15)
+            cache.set('name', result, timeout=60 * 15) """
         items = CartItem.objects.all()
         serializer = CartItemSerializer(items, many=True)
         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
@@ -49,3 +49,25 @@ class CartItemViews(APIView):
         item = get_object_or_404(CartItem, id=id)
         item.delete()
         return Response({"status": "success", "data": "Item Deleted"})
+
+class BaseballStatViews(APIView):
+        
+    #@method_decorator(cache_page(60*15))
+    def get(self, request, id=None):
+        if id:
+            item = BaseballStat.objects.get(id=id)
+            serializer = BaseballStatSerializer(item)
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        result = {
+                "name": "James Sanders"
+        }
+        """ if 'name' in cache:
+            print("Found in Cache")
+        else:
+        # store data in cache
+            print("Setting Cache")
+            cache.set('name', result, timeout=60 * 15) """
+        items = BaseballStat.objects.all()
+        serializer = BaseballStatSerializer(items, many=True)
+        return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+    
