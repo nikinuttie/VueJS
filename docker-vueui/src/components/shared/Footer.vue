@@ -9,12 +9,12 @@
         ></v-img>
       </v-col>
       <v-col cols="11">
-        <v-row align="center" justify="center">
+        <v-row align="center" justify="end">
           <!-- <v-spacer v-if="big_window"></v-spacer> -->
-      <v-icon v-if="big_window">mdi-google-chrome</v-icon>
-      <v-icon v-if="big_window">mdi-microsoft-edge</v-icon>
-      <v-icon v-if="big_window">mdi-firefox</v-icon>
-      <span class="font-weight-bold text--white" v-if="big_window"
+      <v-icon color="white" v-if="big_window">mdi-google-chrome</v-icon>
+      <v-icon color="white" v-if="big_window">mdi-microsoft-edge</v-icon>
+      <v-icon color="white" v-if="big_window">mdi-firefox</v-icon>
+      <span class="text-h5 white--text ma-2wr" v-if="big_window"
         >Site Optimized for Chrome, Edge, or Firefox</span
       >
           <!-- <v-btn

@@ -9,6 +9,14 @@ services:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning
+    volumes: 
+      - ./cache:/data
   restapi:
     build:
       context: ./docker-djangoapi
@@ -22,8 +30,10 @@ services:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - REDIS_PORT=6379
     depends_on:
       - db
+      - cache
   vueui:
     build:
       context: ./docker-vueui
