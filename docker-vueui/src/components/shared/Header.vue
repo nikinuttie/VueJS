@@ -61,8 +61,8 @@
           <v-img
             alt="fda logo"
             contain
-            height="40px"
-            width="40px"
+            height="45px"
+            width="45px"
             :src="asset_url + 'demoicon2.png'"
             v-if="big_window"
           ></v-img>

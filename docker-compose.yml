@@ -45,6 +45,6 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - VUE_APP_API_URL=http://172.20.76.31:8000
+      - VUE_APP_API_URL=http://3.87.205.242:8000
     depends_on:
       - restapi

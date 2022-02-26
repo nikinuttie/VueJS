@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <fdaheader></fdaheader>
+    <headerdemo></headerdemo>
 
     <!-- More Details Dialog -->
     <v-dialog
@@ -26,7 +26,7 @@
               ><span
                 >This site is only meant for
                 <strong>demonstration purposes only</strong> and is not intended
-                for proudction use. It is meant to be used as a template or
+                for production use. It is meant to be used as a template or
                 guide for deploying a web application using Vue.js as the client
                 side framework, Django DRF for the REST API, PostgreSQL as the
                 database backend and Redis as the caching framework.</span
@@ -385,7 +385,6 @@
           <bballstats></bballstats>
         </v-col>
       </v-row>
-      <fdafooter></fdafooter>
     </v-main>
   </v-app>
 </template>
@@ -393,15 +392,13 @@
 <script>
 // @ is an alias to /src
 import Header from "@/components/shared/Header.vue";
-import Footer from "@/components/shared/Footer.vue";
 import Baseball from "@/components/Baseball.vue";
 import axios from "axios";
 
 export default {
   name: "Home",
   components: {
-    fdaheader: Header,
-    fdafooter: Footer,
+    headerdemo: Header,
     bballstats: Baseball
   },
   data: () => ({
@@ -624,6 +621,13 @@ export default {
           console.log(err);
         });
     }, //get all of the data
+  },
+  watch: {
+    items() {
+      if (this.items.length == 0) {
+        this.numberOfRequestPages = 1;
+      }
+    }
   },
   computed: {
     errorMessage() {
