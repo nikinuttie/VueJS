@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CartItem, BaseballStat
+from .models import ProductItem, BaseballStat
 # Register your models here.
-admin.site.register(CartItem)
+admin.site.register(ProductItem)
 admin.site.register(BaseballStat)

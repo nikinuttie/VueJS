@@ -6,13 +6,13 @@ from rest_framework import status
 from django.core.cache import cache
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
-from .serializers import CartItemSerializer, BaseballStatSerializer
-from .models import CartItem, BaseballStat
+from .serializers import ProductItemSerializer, BaseballStatSerializer
+from .models import ProductItem, BaseballStat
 
 # Create your views here.
-class CartItemViews(APIView):
+class ProductItemViews(APIView):
     def post(self, request):
-        serializer = CartItemSerializer(data=request.data)
+        serializer = ProductItemSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
@@ -22,8 +22,8 @@ class CartItemViews(APIView):
     #@method_decorator(cache_page(60*15))
     def get(self, request, id=None):
         if id:
-            item = CartItem.objects.get(id=id)
-            serializer = CartItemSerializer(item)
+            item = ProductItem.objects.get(id=id)
+            serializer = ProductItemSerializer(item)
             return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
         dbhits = 1
         if 'productdbhits' in cache:
@@ -36,24 +36,24 @@ class CartItemViews(APIView):
             print("Setting Product DB Hit Metrics Cache")
             #set this to not expire
             cache.set('productdbhits', 1, timeout=None)
-        items = CartItem.objects.all()
+        items = ProductItem.objects.all()
         
-        serializer = CartItemSerializer(items, many=True)
+        serializer = ProductItemSerializer(items, many=True)
         data = {
             'items': serializer.data,
             'hits': dbhits
         }
         return Response({"status": "success", "data": data}, status=status.HTTP_200_OK)
     def patch(self, request, id=None):
-        item = CartItem.objects.get(id=id)
-        serializer = CartItemSerializer(item, data=request.data, partial=True) #TODO: read more about this and better understand how this serializer works
+        item = ProductItem.objects.get(id=id)
+        serializer = ProductItemSerializer(item, data=request.data, partial=True) 
         if serializer.is_valid():
             serializer.save()
             return Response({"status": "success", "data": serializer.data})
         else:
             return Response({"status": "error", "data": serializer.errors})
     def delete(self, request, id=None):
-        item = get_object_or_404(CartItem, id=id)
+        item = get_object_or_404(ProductItem, id=id)
         item.delete()
         return Response({"status": "success", "data": "Item Deleted"})
 

@@ -546,7 +546,7 @@ export default {
     deleteData(item) {
       var vm = this;
       axios
-        .delete(process.env.VUE_APP_API_URL + "/api/cart-items/" + item.id)
+        .delete(process.env.VUE_APP_API_URL + "/api/product-items/" + item.id)
         .then((response) => {
           console.log(response);
           vm.getData();
@@ -558,7 +558,7 @@ export default {
       if (this.$refs.addDataForm.validate()) {
         axios({
           method: "post",
-          url: process.env.VUE_APP_API_URL + "/api/cart-items/",
+          url: process.env.VUE_APP_API_URL + "/api/product-items/",
           data: vm.newdata,
         })
           .then((response) => {
@@ -602,7 +602,7 @@ export default {
       if (this.$refs.editDataForm.validate()) {
         axios({
           method: "patch",
-          url: process.env.VUE_APP_API_URL + "/api/cart-items/"+id,
+          url: process.env.VUE_APP_API_URL + "/api/product-items/"+id,
           data: vm.editdata,
         })
           .then((response) => {
@@ -626,7 +626,7 @@ export default {
       var vm = this;
       this.dataLoading = true;
       axios
-        .get(process.env.VUE_APP_API_URL + "/api/cart-items/")
+        .get(process.env.VUE_APP_API_URL + "/api/product-items/")
         .then((response) => {
           console.log(response);
           vm.items = response.data.data.items;

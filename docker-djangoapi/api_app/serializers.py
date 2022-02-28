@@ -1,8 +1,8 @@
 from email.policy import default
 from rest_framework import serializers
-from .models import CartItem,BaseballStat
+from .models import ProductItem,BaseballStat
 
-class CartItemSerializer(serializers.ModelSerializer):
+class ProductItemSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField(max_length=200)
     product_price = serializers.FloatField()
     product_quantity = serializers.IntegerField(required=False, default=1)
@@ -11,7 +11,7 @@ class CartItemSerializer(serializers.ModelSerializer):
     product_date_created = serializers.DateField(format="%Y-%m-%d")
 
     class Meta:
-        model = CartItem
+        model = ProductItem
         fields = ('__all__')
 
 class BaseballStatSerializer(serializers.ModelSerializer):
