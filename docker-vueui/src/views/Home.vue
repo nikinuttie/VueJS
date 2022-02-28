@@ -281,6 +281,8 @@
                 item-key="id"
                 hide-default-footer
                 no-data-text="No data found."
+                :loading="dataLoading"
+                loading-text="Data loading ..."
                 fixed-header
                 height="325"
                 calculate-widths
@@ -344,7 +346,18 @@
                     </v-icon>
                       DB Hits: {{ productdbhits }}
                     </v-chip>
-                    
+                    <v-btn
+                      class="mx-2"
+                      fab
+                      dark
+                      x-small
+                      color="primary"
+                      @click="getData()"
+                    >
+                      <v-icon dark>
+                        mdi-refresh
+                      </v-icon>
+                    </v-btn>
 
                     <v-spacer></v-spacer>
 
@@ -404,6 +417,7 @@ export default {
   data: () => ({
     moreInformationDialog: false,
     editDataDialog: false,
+    dataLoading: false,
     rules: {
       required: (value) => !!value || "Required.",
       counter: (value) => value.length <= 20 || "Max 20 characters",
@@ -610,15 +624,18 @@ export default {
     },
     getData() {
       var vm = this;
+      this.dataLoading = true;
       axios
         .get(process.env.VUE_APP_API_URL + "/api/cart-items/")
         .then((response) => {
           console.log(response);
           vm.items = response.data.data.items;
           vm.productdbhits = response.data.data.hits;
+          vm.dataLoading = false;
         })
         .catch((err) => {
           console.log(err);
+          vm.dataLoading = false;
         });
     }, //get all of the data
   },
