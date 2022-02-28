@@ -38,113 +38,103 @@
     </v-dialog>
 
     <!-- Edit Data Dialog -->
-    <v-dialog
-      id="editDataDialog"
-      v-model="editDataDialog"
-      max-width="600px"
-    >
-            <v-container fluid white elevation="4" class="pa-0">
-              <v-row style="background-color: #0097e3" class="ma-0 pa-2" no-gutters>
+    <v-dialog id="editDataDialog" v-model="editDataDialog" max-width="600px">
+      <v-container fluid white elevation="4" class="pa-0">
+        <v-row style="background-color: #0097e3" class="ma-0 pa-2" no-gutters>
           <div :class="'pl-4 text-h6 white--text'">Edit Data</div>
           <div class="flex-grow-1"></div>
-          <v-icon
-            color="white"
-            @click="closeEditData()"
-            >mdi-close-box</v-icon
-          >
+          <v-icon color="white" @click="closeEditData()">mdi-close-box</v-icon>
         </v-row>
-              <v-row class="mt-4" align="center" justify="center" no-gutters>
-                <v-form ref="editDataForm" v-model="valid">
-                  <v-row dense class="pt-0 mt-0 pb-0 mb-0">
-                    <v-col class="d-flex" cols="12" sm="6">
-                      <v-text-field
-                        v-model="editdata.product_name"
-                        :counter="20"
-                        label="Product Name"
-                        :rules="[rules.required, rules.counter]"
-                        outlined
-                        dense
-                      ></v-text-field>
-                    </v-col>
-                    <v-col class="d-flex" cols="12" sm="6">
-                      <v-text-field
-                        v-model="editdata.product_price"
-                        label="Product Price"
-                        outlined
-                        type="number"
-                        :rules="[rules.required]"
-                        dense
-                        prefix="$"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row dense class="pt-0 mt-0 pb-0 mb-0">
-                    <v-col class="d-flex" cols="12" sm="6">
-                      <v-text-field
-                        v-model="editdata.product_quantity"
-                        type="number"
-                        label="Product Quantity"
-                        :rules="[rules.required, rules.isint]"
-                        outlined
-                        required
-                        dense
-                      ></v-text-field>
-                    </v-col>
-                    <v-col class="d-flex" cols="12" sm="6">
-                      <v-select
-                        :items="productTypes"
-                        label="Product Type"
-                        outlined
-                        dense
-                        v-model="editdata.product_type"
-                      ></v-select>
-                    </v-col>
-                  </v-row>
-                  <v-row dense class="pt-0 mt-0 pb-0 mb-0">
-                    <v-col class="d-flex" cols="12" sm="6">
-                      <v-select
-                        :items="productPriority"
-                        label="Product Priority"
-                        outlined
-                        dense
-                        v-model="editdata.product_priority"
-                      ></v-select>
-                    </v-col>
-                    <v-col class="d-flex" cols="12" sm="6">
-                      <v-menu
-                        v-model="dateSelectMenu"
-                        :close-on-content-click="false"
-                        :nudge-right="40"
-                        transition="scale-transition"
-                        offset-y
-                        min-width="auto"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            v-model="editdata.product_date_created"
-                            label="Date Created"
-                            prepend-icon="mdi-calendar"
-                            readonly
-                            dense
-                            v-bind="attrs"
-                            v-on="on"
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker
-                          v-model="editdata.product_date_created"
-                          @input="dateSelectMenu = false"
-                        ></v-date-picker>
-                      </v-menu>
-                    </v-col>
-                  </v-row>
-                </v-form>
-              </v-row>
-              <v-row align="center" justify="center" no-gutters>
-                <v-btn class="mb-3" color="primary" @click="editData()"
-                  >Edit</v-btn
+        <v-row class="mt-4" align="center" justify="center" no-gutters>
+          <v-form ref="editDataForm" v-model="valid">
+            <v-row dense class="pt-0 mt-0 pb-0 mb-0">
+              <v-col class="d-flex" cols="12" sm="6">
+                <v-text-field
+                  v-model="editdata.product_name"
+                  :counter="20"
+                  label="Product Name"
+                  :rules="[rules.required, rules.counter]"
+                  outlined
+                  dense
+                ></v-text-field>
+              </v-col>
+              <v-col class="d-flex" cols="12" sm="6">
+                <v-text-field
+                  v-model="editdata.product_price"
+                  label="Product Price"
+                  outlined
+                  type="number"
+                  :rules="[rules.required]"
+                  dense
+                  prefix="$"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row dense class="pt-0 mt-0 pb-0 mb-0">
+              <v-col class="d-flex" cols="12" sm="6">
+                <v-text-field
+                  v-model="editdata.product_quantity"
+                  type="number"
+                  label="Product Quantity"
+                  :rules="[rules.required, rules.isint]"
+                  outlined
+                  required
+                  dense
+                ></v-text-field>
+              </v-col>
+              <v-col class="d-flex" cols="12" sm="6">
+                <v-select
+                  :items="productTypes"
+                  label="Product Type"
+                  outlined
+                  dense
+                  v-model="editdata.product_type"
+                ></v-select>
+              </v-col>
+            </v-row>
+            <v-row dense class="pt-0 mt-0 pb-0 mb-0">
+              <v-col class="d-flex" cols="12" sm="6">
+                <v-select
+                  :items="productPriority"
+                  label="Product Priority"
+                  outlined
+                  dense
+                  v-model="editdata.product_priority"
+                ></v-select>
+              </v-col>
+              <v-col class="d-flex" cols="12" sm="6">
+                <v-menu
+                  v-model="dateSelectMenu"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
                 >
-              </v-row>
-            </v-container>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="editdata.product_date_created"
+                      label="Date Created"
+                      prepend-icon="mdi-calendar"
+                      readonly
+                      dense
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="editdata.product_date_created"
+                    @input="dateSelectMenu = false"
+                  ></v-date-picker>
+                </v-menu>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-row>
+        <v-row align="center" justify="center" no-gutters>
+          <v-btn class="mb-3" color="primary" @click="editData()">Edit</v-btn>
+        </v-row>
+      </v-container>
     </v-dialog>
     <!-- Main Content Area -->
     <v-main role="heading" aria-level="1">
@@ -172,7 +162,7 @@
                 class="ma-0 pa-2"
                 no-gutters
               >
-                <div :class="'pl-4 text-h6 white--text'">Add Data</div>
+                <div :class="'pl-4 text-h6 white--text'">Add Product Data</div>
                 <div class="flex-grow-1"></div>
               </v-row>
               <v-row align="center" justify="center">
@@ -336,14 +326,8 @@
                         </v-list-item>
                       </v-list>
                     </v-menu>
-                    <v-chip
-                      class="ma-2 white--text"
-                      color="red darken-4"
-                      label
-                    >
-                    <v-icon left>
-                      mdi-database
-                    </v-icon>
+                    <v-chip class="ma-2 white--text" color="red darken-4" label>
+                      <v-icon left> mdi-database </v-icon>
                       DB Hits: {{ productdbhits }}
                     </v-chip>
                     <v-btn
@@ -354,10 +338,9 @@
                       color="primary"
                       @click="getData()"
                     >
-                      <v-icon dark>
-                        mdi-refresh
-                      </v-icon>
+                      <v-icon dark> mdi-refresh </v-icon>
                     </v-btn>
+                    <span class="ml-3">Data Not Cached in Redis</span>
 
                     <v-spacer></v-spacer>
 
@@ -412,7 +395,7 @@ export default {
   name: "Home",
   components: {
     headerdemo: Header,
-    bballstats: Baseball
+    bballstats: Baseball,
   },
   data: () => ({
     moreInformationDialog: false,
@@ -498,9 +481,7 @@ export default {
       product_type: "Home",
       product_name: "",
     },
-    editdata: {
-
-    },
+    editdata: {},
     productTypes: ["Home", "Sport", "Education", "Lawn", "Other"],
     productPriority: ["Low", "Med", "High"],
     date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
@@ -598,11 +579,11 @@ export default {
       var id = this.editdata.id;
 
       delete this.editdata.id;
-      
+
       if (this.$refs.editDataForm.validate()) {
         axios({
           method: "patch",
-          url: process.env.VUE_APP_API_URL + "/api/product-items/"+id,
+          url: process.env.VUE_APP_API_URL + "/api/product-items/" + id,
           data: vm.editdata,
         })
           .then((response) => {
@@ -610,15 +591,11 @@ export default {
             vm.getData();
             vm.$refs.editDataForm.resetValidation();
             vm.editDataDialog = false;
-            
-            
           })
           .catch(function (error) {
             console.log(error);
             vm.$refs.editDataForm.resetValidation();
             vm.editDataDialog = false;
-            
-            
           });
       } //make sure valid data before updating
     },
@@ -644,7 +621,7 @@ export default {
       if (this.items.length == 0) {
         this.numberOfRequestPages = 1;
       }
-    }
+    },
   },
   computed: {
     errorMessage() {

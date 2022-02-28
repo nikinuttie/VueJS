@@ -1,191 +1,173 @@
 <template>
   <v-app>
-    
     <!-- Edit Data Dialog -->
-    <v-dialog
-      id="editDataDialog"
-      v-model="editDataDialog"
-      max-width="600px"
-    >
-            <v-container fluid white elevation="4" class="pa-0">
-              <v-row style="background-color: #0097e3" class="ma-0 pa-2" no-gutters>
+    <v-dialog id="editDataDialog" v-model="editDataDialog" max-width="600px">
+      <v-container fluid white elevation="4" class="pa-0">
+        <v-row style="background-color: #0097e3" class="ma-0 pa-2" no-gutters>
           <div :class="'pl-4 text-h6 white--text'">Edit Data</div>
           <div class="flex-grow-1"></div>
-          <v-icon
-            color="white"
-            @click="closeEditData()"
-            >mdi-close-box</v-icon
-          >
+          <v-icon color="white" @click="closeEditData()">mdi-close-box</v-icon>
         </v-row>
-              <v-row class="mt-4" align="center" justify="center" no-gutters>
-                <v-form ref="editDataForm" v-model="valid">
-                  <v-row dense class="pt-0 mt-0 pb-0 mb-0">
-                    <v-col class="d-flex" cols="12" sm="6">
-                      <v-text-field
-                        v-model="editdata.product_name"
-                        :counter="20"
-                        label="Product Name"
-                        :rules="[rules.required, rules.counter]"
-                        outlined
-                        dense
-                      ></v-text-field>
-                    </v-col>
-                    <v-col class="d-flex" cols="12" sm="6">
-                      <v-text-field
-                        v-model="editdata.product_price"
-                        label="Product Price"
-                        outlined
-                        type="number"
-                        :rules="[rules.required]"
-                        dense
-                        prefix="$"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row dense class="pt-0 mt-0 pb-0 mb-0">
-                    <v-col class="d-flex" cols="12" sm="6">
-                      <v-text-field
-                        v-model="editdata.product_quantity"
-                        type="number"
-                        label="Product Quantity"
-                        :rules="[rules.required, rules.isint]"
-                        outlined
-                        required
-                        dense
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-form>
-              </v-row>
-              <v-row align="center" justify="center" no-gutters>
-                <v-btn class="mb-3" color="primary" @click="editData()"
-                  >Edit</v-btn
-                >
-              </v-row>
-            </v-container>
+        <v-row class="mt-4" align="center" justify="center" no-gutters>
+          <v-form ref="editDataForm" v-model="valid">
+            <v-row dense class="pt-0 mt-0 pb-0 mb-0">
+              <v-col class="d-flex" cols="12" sm="6">
+                <v-text-field
+                  v-model="editdata.product_name"
+                  :counter="20"
+                  label="Product Name"
+                  :rules="[rules.required, rules.counter]"
+                  outlined
+                  dense
+                ></v-text-field>
+              </v-col>
+              <v-col class="d-flex" cols="12" sm="6">
+                <v-text-field
+                  v-model="editdata.product_price"
+                  label="Product Price"
+                  outlined
+                  type="number"
+                  :rules="[rules.required]"
+                  dense
+                  prefix="$"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row dense class="pt-0 mt-0 pb-0 mb-0">
+              <v-col class="d-flex" cols="12" sm="6">
+                <v-text-field
+                  v-model="editdata.product_quantity"
+                  type="number"
+                  label="Product Quantity"
+                  :rules="[rules.required, rules.isint]"
+                  outlined
+                  required
+                  dense
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-row>
+        <v-row align="center" justify="center" no-gutters>
+          <v-btn class="mb-3" color="primary" @click="editData()">Edit</v-btn>
+        </v-row>
+      </v-container>
     </v-dialog>
 
     <!-- Data Table Card -->
-          <v-card height="400">
-            <v-container white fluid class="pa-2">
-              <v-data-table
-                :headers="headers"
-                :items="items"
-                :items-per-page="requestItemsPerPage"
-                :page.sync="requestItemsPage"
-                @page-count="numberOfRequestPages = $event"
-                item-key="id"
-                hide-default-footer
-                no-data-text="No data found."
-                :loading="dataLoading"
-                loading-text="Data loading ..."
-                fixed-header
-                height="325"
-                calculate-widths
-                class=""
+    <v-card height="400">
+      <v-container white fluid class="pa-2">
+        <v-data-table
+          :headers="headers"
+          :items="items"
+          :items-per-page="requestItemsPerPage"
+          :page.sync="requestItemsPage"
+          @page-count="numberOfRequestPages = $event"
+          item-key="id"
+          hide-default-footer
+          no-data-text="No data found."
+          :loading="dataLoading"
+          loading-text="Data loading ..."
+          fixed-header
+          height="325"
+          calculate-widths
+          class=""
+        >
+          <!-- <template v-slot:item.actions="{ item }">
+            <v-btn
+              text
+              x-small
+              color="primary"
+              @click="updateItemInitialize(item)"
+            >
+              <v-icon small class="pr-2">mdi-pencil</v-icon>Edit
+            </v-btn>
+            <v-btn
+              text
+              x-small
+              color="primary"
+              @click="deleteItemInitialize(item)"
+            >
+              <v-icon small class="pr-2">mdi-delete</v-icon>Delete
+            </v-btn>
+          </template> -->
+          <template v-slot:footer class="ml-2">
+            <v-row class="ma-2" align="center" justify="start" no-gutters>
+              <span class="black--text font-weight-bold ml-3"
+                >Items per page</span
               >
-                <template v-slot:item.actions="{ item }">
+              <v-menu offset-y>
+                <template v-slot:activator="{ on, attrs }">
                   <v-btn
+                    aria-label="Items per page selection"
+                    dark
                     text
-                    x-small
                     color="primary"
-                    @click="updateItemInitialize(item)"
+                    class="ml-2"
+                    v-bind="attrs"
+                    v-on="on"
                   >
-                    <v-icon small class="pr-2">mdi-pencil</v-icon>Edit
-                  </v-btn>
-                  <v-btn
-                    text
-                    x-small
-                    color="primary"
-                    @click="deleteItemInitialize(item)"
-                  >
-                    <v-icon small class="pr-2">mdi-delete</v-icon>Delete
+                    {{ requestItemsPerPage }}
+                    <v-icon>mdi-chevron-down</v-icon>
                   </v-btn>
                 </template>
-                <template v-slot:footer class="ml-2">
-                  <v-row class="ma-2" align="center" justify="start" no-gutters>
-                    <span class="black--text font-weight-bold ml-3"
-                      >Items per page</span
-                    >
-                    <v-menu offset-y>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                          aria-label="Items per page selection"
-                          dark
-                          text
-                          color="primary"
-                          class="ml-2"
-                          v-bind="attrs"
-                          v-on="on"
-                        >
-                          {{ requestItemsPerPage }}
-                          <v-icon>mdi-chevron-down</v-icon>
-                        </v-btn>
-                      </template>
-                      <v-list>
-                        <v-list-item
-                          v-for="(number, index) in requestItemsPerPageSelect"
-                          :key="index"
-                          @click="updateRequestItemsPerPage(number)"
-                        >
-                          <v-list-item-title>{{ number }}</v-list-item-title>
-                        </v-list-item>
-                      </v-list>
-                    </v-menu>
-                  <v-chip
-                      class="ma-2 white--text"
-                      color="red darken-4"
-                      label
-                    >
-                    <v-icon left>
-                      mdi-database
-                    </v-icon>
-                      DB Hits: {{ baseballdbhits }}
-                    </v-chip>
-                    <v-btn
-                      class="mx-2"
-                      fab
-                      dark
-                      x-small
-                      color="primary"
-                      @click="getData()"
-                    >
-                      <v-icon dark>
-                        mdi-refresh
-                      </v-icon>
-                    </v-btn>
-                    <v-spacer></v-spacer>
+                <v-list>
+                  <v-list-item
+                    v-for="(number, index) in requestItemsPerPageSelect"
+                    :key="index"
+                    @click="updateRequestItemsPerPage(number)"
+                  >
+                    <v-list-item-title>{{ number }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+              <v-chip class="ma-2 white--text" color="red darken-4" label>
+                <v-icon left> mdi-database </v-icon>
+                DB Hits: {{ baseballdbhits }}
+              </v-chip>
+              <v-btn
+                class="mx-2"
+                fab
+                dark
+                x-small
+                color="primary"
+                @click="getData()"
+              >
+                <v-icon dark> mdi-refresh </v-icon>
+              </v-btn>
+              <span class="ml-3">Data Cached in Redis for 60 Seconds</span>
+              <v-spacer></v-spacer>
 
-                    <span class="mr-4 black--text font-weight-bold">
-                      Page {{ requestItemsPage }} of {{ numberOfRequestPages }}
-                    </span>
-                    <v-btn
-                      aria-label="Previous page button"
-                      fab
-                      dark
-                      small
-                      color="blue darken-3"
-                      class="mr-1 mb-1"
-                      @click="previousRequestPage"
-                    >
-                      <v-icon small>mdi-chevron-left</v-icon>
-                    </v-btn>
-                    <v-btn
-                      aria-label="Next page button"
-                      fab
-                      dark
-                      small
-                      color="blue darken-3"
-                      class="ml-1 mb-1"
-                      @click="nextRequestPage"
-                    >
-                      <v-icon small>mdi-chevron-right</v-icon>
-                    </v-btn>
-                  </v-row>
-                </template>
-              </v-data-table>
-            </v-container>
-          </v-card>
+              <span class="mr-4 black--text font-weight-bold">
+                Page {{ requestItemsPage }} of {{ numberOfRequestPages }}
+              </span>
+              <v-btn
+                aria-label="Previous page button"
+                fab
+                dark
+                small
+                color="blue darken-3"
+                class="mr-1 mb-1"
+                @click="previousRequestPage"
+              >
+                <v-icon small>mdi-chevron-left</v-icon>
+              </v-btn>
+              <v-btn
+                aria-label="Next page button"
+                fab
+                dark
+                small
+                color="blue darken-3"
+                class="ml-1 mb-1"
+                @click="nextRequestPage"
+              >
+                <v-icon small>mdi-chevron-right</v-icon>
+              </v-btn>
+            </v-row>
+          </template>
+        </v-data-table>
+      </v-container>
+    </v-card>
   </v-app>
 </template>
 
@@ -269,13 +251,13 @@ export default {
         class: "blue darken-2 white--text font-weight-bold",
         value: "rbi",
       },
-      {
+      /* {
         sortable: false,
         text: "Action",
         align: "center",
         value: "actions",
         class: "blue darken-2 white--text font-weight-bold",
-      },
+      }, */
     ],
     items: [],
     baseballdbhits: 0,
@@ -284,9 +266,7 @@ export default {
     requestItemsPerPage: 10,
     numberOfRequestPages: 1,
     valid: true,
-    editdata: {
-
-    }
+    editdata: {},
   }),
   created() {
     this.getData();
@@ -332,11 +312,11 @@ export default {
       var id = this.editdata.id;
 
       delete this.editdata.id;
-      
+
       if (this.$refs.editDataForm.validate()) {
         axios({
           method: "patch",
-          url: process.env.VUE_APP_API_URL + "/api/bball-stats/"+id,
+          url: process.env.VUE_APP_API_URL + "/api/bball-stats/" + id,
           data: vm.editdata,
         })
           .then((response) => {
@@ -349,8 +329,6 @@ export default {
             console.log(error);
             vm.$refs.editDataForm.resetValidation();
             vm.editDataDialog = false;
-            
-            
           });
       } //make sure valid data before updating
     },
