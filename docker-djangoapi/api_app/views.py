@@ -69,6 +69,7 @@ class BaseballStatViews(APIView):
     @method_decorator(vary_on_cookie)
     @method_decorator(cache_page(60*1))
     def get(self, request, id=None):
+        
         if id:
             item = BaseballStat.objects.get(id=id)
             serializer = BaseballStatSerializer(item)
